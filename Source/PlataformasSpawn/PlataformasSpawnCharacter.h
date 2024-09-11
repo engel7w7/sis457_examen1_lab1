@@ -6,7 +6,10 @@
 #include "GameFramework/Character.h"
 #include "PlataformasSpawnCharacter.generated.h"
 
-UCLASS(config=Game)
+// Forward declaration de AProyectil
+class Aproyectil;
+
+UCLASS(config = Game)
 class APlataformasSpawnCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -32,8 +35,16 @@ protected:
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-	// End of APawn interface
+public:
+	// Función para disparar el proyectil
+	void DispararProyectil();
 
+private:
+	// Clase del proyectil a disparar
+	UPROPERTY(EditDefaultsOnly, Category = "Proyectil")
+	TSubclassOf<Aproyectil> ClaseProyectil;
+
+	// End of APawn interface
 
 public:
 	APlataformasSpawnCharacter();

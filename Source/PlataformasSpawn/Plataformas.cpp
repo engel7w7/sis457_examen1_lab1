@@ -16,9 +16,9 @@ APlataformas::APlataformas()
 	PlataformaMesh->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
 	PlataformaMesh->SetStaticMesh(Plataforma.Object);
 	SetRootComponent(PlataformaMesh);
-	LimiteSuperior = 600.0f;
-	LimiteInferior = -600.0f;
-	velocidad = 20.f;
+	LimiteSuperior = 200.0f;
+	LimiteInferior = 0.0f;
+	velocidad = 50.f;
 	DireccionMovimiento = FVector(0.f, 0.f, 1.f);
 }
 
@@ -35,10 +35,10 @@ void APlataformas::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (mover == true)
 	{
-		FVector NuevaPosicion = GetActorLocation() + (DireccionMovimiento.Z * DeltaTime *velocidad);
+		FVector NuevaPosicion = GetActorLocation() + (DireccionMovimiento * DeltaTime *velocidad);
 		if (NuevaPosicion.Z >= LimiteSuperior || NuevaPosicion.Z <= LimiteInferior)
 		{
-			DireccionMovimiento.Z *= -1;
+			DireccionMovimiento *= -1;
 		}
 
 		SetActorLocation(NuevaPosicion);

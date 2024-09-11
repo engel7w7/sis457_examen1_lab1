@@ -20,7 +20,7 @@ APlataformasSpawnGameMode::APlataformasSpawnGameMode()
 
 	Posicion = FVector(1180.f, 1100.f, 140.f);
 	Rotacion = FRotator(0.0f,0.0f,0.0f);
-	PosicionAuxiliar = 750.f;
+	PosicionAuxiliar = 845.f;
 	Time = 0.0f;
 	spawnsPlataformas = 0;
 	band = 0;
@@ -67,13 +67,10 @@ void APlataformasSpawnGameMode::BeginPlay()
 	aux1 = FMath::RandRange(0, MapPlat.Num() - 1);
 	aux2 = FMath::RandRange(0, MapPlat.Num() - 1);
 	aux3 = FMath::RandRange(0, MapPlat.Num() - 1);
-
-	if (APlataformas* Plataforma = Cast<APlataformas>(MapPlat[aux1]))
-         Plataforma->setmover(true);
-    if (APlataformas* Plataforma = Cast<APlataformas>(MapPlat[aux2]))
-         Plataforma->setmover(true);
-    if (APlataformas* Plataforma = Cast<APlataformas>(MapPlat[aux3]))
-         Plataforma->setmover(true);
+	//APlataformas* MapPlat[aux1];
+	Cast<APlataformas>(MapPlat[aux1])->setmover(true);
+	Cast<APlataformas>(MapPlat[aux2])->setmover(true);
+	Cast<APlataformas>(MapPlat[aux3])->setmover(true);
 }
 	//spawnsPlataformas = ContPlataformas.Num() - 1; //4 elementos [0,1,2,3]
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, 
