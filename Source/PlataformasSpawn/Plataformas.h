@@ -10,8 +10,8 @@ UCLASS()
 class PLATAFORMASSPAWN_API APlataformas : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	APlataformas();
 
@@ -19,22 +19,23 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 private:
 	bool mover;
-	float LimiteSuperior;
-	float LimiteInferior;
+	FVector LimiteSuperior;
+	FVector LimiteInferior;
 	FVector DireccionMovimiento;
 	float velocidad;
+
 public:
 	void setmover(bool _mover) { mover = _mover; }
 	bool getmover() { return mover; }
-protected:
 
-	//Malla de la plataforma
+protected:
+	// Malla de la plataforma
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* PlataformaMesh;
-
 };

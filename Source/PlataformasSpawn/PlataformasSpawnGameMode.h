@@ -23,15 +23,19 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	//TArray<AActor*> ContPlataformas;
-	TMap<int32, AActor*> MapPlat;
+	void GenerarEnemigos();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AEnemigoDisparo> EnemigoClase;
+	int MaxEnemigos, EnemigosGenerados;
+	TArray<AEnemigoDisparo*> Enemigos;
+	TMap<FString, AActor*> MapPlat;
 	FVector Posicion;
 	float PosicionAuxiliar;
 	FRotator Rotacion;
 	int spawnsPlataformas;
 	float Time;
 	int band;
-	//Clases
 	class ABarril* Ba;
 	int cont;
 	int32 aux1,aux2,aux3;

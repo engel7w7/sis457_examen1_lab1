@@ -16,33 +16,43 @@ APlataformas::APlataformas()
 	PlataformaMesh->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
 	PlataformaMesh->SetStaticMesh(Plataforma.Object);
 	SetRootComponent(PlataformaMesh);
-	LimiteSuperior = 200.0f;
-	LimiteInferior = 0.0f;
-	velocidad = 50.f;
+	//PlataformaMesh->SetCollisionProfileName(TEXT("NoCollision"));
+	velocidad = 100.f;
 	DireccionMovimiento = FVector(0.f, 0.f, 1.f);
+	mover = false;
 }
 
 // Called when the game starts or when spawned
 void APlataformas::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    LimiteSuperior = GetActorLocation() + FVector(0.0f, 0.0f, 150.f);
+    LimiteInferior = GetActorLocation() + FVector(0.0f, 0.0f, -100.f);
 }
 
 // Called every frame
 void APlataformas::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (mover == true)
-	{
-		FVector NuevaPosicion = GetActorLocation() + (DireccionMovimiento * DeltaTime *velocidad);
-		if (NuevaPosicion.Z >= LimiteSuperior || NuevaPosicion.Z <= LimiteInferior)
-		{
-			DireccionMovimiento *= -1;
-		}
+    if (mover == true)
+    {
+        FVector ActorLocation = GetActorLocation();
+        float NuevaPosicionZ = ActorLocation.Z + (DireccionMovimiento.Z * DeltaTime * velocidad);
 
-		SetActorLocation(NuevaPosicion);
-	}
-	
+        if (NuevaPosicionZ >= LimiteSuperior.Z)
+        {
+            NuevaPosicionZ = LimiteSuperior.Z;
+            DireccionMovimiento.Z *= -1;
+
+        }
+        else if (NuevaPosicionZ <= LimiteInferior.Z)
+        {
+            NuevaPosicionZ = LimiteInferior.Z;
+            DireccionMovimiento.Z *= -1;
+
+        }
+        FVector NuevaPosicion = FVector(LimiteSuperior.X, LimiteSuperior.Y, NuevaPosicionZ);
+
+        SetActorLocation(NuevaPosicion);
+    }
 }
-

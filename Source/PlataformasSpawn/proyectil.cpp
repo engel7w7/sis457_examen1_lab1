@@ -14,26 +14,22 @@ Aproyectil::Aproyectil()
     // Initialize and set the collision sphere as the root component
     ColisionEsfera = CreateDefaultSubobject<USphereComponent>(TEXT("ColisionEsfera"));
     ColisionEsfera->InitSphereRadius(10.0f);
-    //ColisionEsfera->SetCollisionProfileName(TEXT("BlockAllDynamic"));
-    ColisionEsfera->SetCollisionProfileName(TEXT("NoCollision"));  // Prueba sin colisiones
+    ColisionEsfera->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+    //ColisionEsfera->SetCollisionProfileName(TEXT("NoCollision"));
     RootComponent = ColisionEsfera;
 
     // Initialize and attach the projectile mesh to the root component
     ProyectilMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Proyectil_Mesh"));
-    ProyectilMesh->SetupAttachment(RootComponent); // Attach to the collision sphere
+    ProyectilMesh->SetupAttachment(RootComponent);
     ProyectilMesh->SetRelativeScale3D(FVector(0.4f, 0.4f, 0.4f));
     ProyectilMesh->SetStaticMesh(ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Game/Geometry/CocoMesh/CocoStaticMesh.CocoStaticMesh'")).Object);
 
     // Initialize and configure the projectile movement component
     MovimientoProyectil = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("MovimientoProyectil"));
-    MovimientoProyectil->InitialSpeed = 400.0f;
-    MovimientoProyectil->MaxSpeed = 800.0f;
-
-    // Bind the OnHit event
+    MovimientoProyectil->InitialSpeed = 1500.0f;
+    MovimientoProyectil->MaxSpeed = 2500.0f;
     ColisionEsfera->OnComponentHit.AddDynamic(this, &Aproyectil::OnHit);
-
-    // Set the lifespan of the projectile
-    InitialLifeSpan = 2.0f;
+    InitialLifeSpan = 0.5f;
 }
 
 // Called when the game starts or when spawned

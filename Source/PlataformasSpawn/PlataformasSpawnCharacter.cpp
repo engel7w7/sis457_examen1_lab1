@@ -26,7 +26,7 @@ APlataformasSpawnCharacter::APlataformasSpawnCharacter()
     CameraBoom->SetupAttachment(RootComponent);
     CameraBoom->SetUsingAbsoluteRotation(true); // Rotation of the character should not affect rotation of boom
     CameraBoom->bDoCollisionTest = false;
-    CameraBoom->TargetArmLength = 1950.f;
+    CameraBoom->TargetArmLength = 1750.f;
     CameraBoom->SocketOffset = FVector(0.f, 0.f, 75.f);
     CameraBoom->SetRelativeRotation(FRotator(0.f, 180.f, 0.f));
 
@@ -40,7 +40,7 @@ APlataformasSpawnCharacter::APlataformasSpawnCharacter()
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f); // Rotation rate
     GetCharacterMovement()->GravityScale = 2.f;
     GetCharacterMovement()->AirControl = 0.80f;
-    GetCharacterMovement()->JumpZVelocity = 1750.f;
+    GetCharacterMovement()->JumpZVelocity = 1500.f;
     GetCharacterMovement()->GroundFriction = 3.f;
     GetCharacterMovement()->MaxWalkSpeed = 600.f;
     GetCharacterMovement()->MaxFlySpeed = 600.f;
@@ -95,14 +95,6 @@ void APlataformasSpawnCharacter::DispararProyectil()
         if (World)
         {
             Aproyectil* Projectile = World->SpawnActor<Aproyectil>(ClaseProyectil, SpawnLocation, SpawnRotation);
-            if (Projectile)
-            {
-                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("[disparando cocos!]"));
-            }
-            else
-            {
-                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Failed to spawn projectile!"));
-            }
         }
         else
         {
