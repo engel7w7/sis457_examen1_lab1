@@ -29,6 +29,7 @@ private:
 	TSubclassOf<class AEnemigoDisparo> EnemigoClase;
 	int MaxEnemigos, EnemigosGenerados;
 	TArray<AEnemigoDisparo*> Enemigos;
+	//TArray<AMuro*> Muros;
 	TMap<FString, AActor*> MapPlat;
 	FVector Posicion;
 	float PosicionAuxiliar;

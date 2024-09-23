@@ -16,7 +16,7 @@ AEnemigoDisparo::AEnemigoDisparo()
 	SetRootComponent(CuboMesh);
 
 	Fire = FVector(0.0f, 1.0f, 0.0f); 
-	FireRate = 0.5f;  
+	FireRate = 0.5f;
 	bCanFire = true;  
 	bDisIz = false;	
 	static ConstructorHelpers::FClassFinder<Aproyectil> ProyectilClassFinder(TEXT("Class'/Script/PlataformasSpawn.proyectil'"));

@@ -4,6 +4,11 @@
 #include "Plataformas.h"
 #include "Barril.h"
 #include "EnemigoDisparo.h"
+#include "Muro.h"
+#include "MuroCongelado.h"  
+#include "MuroLadrillo.h"
+#include "MuroPegajoso.h"
+#include "MuroElectrico.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
 
@@ -26,14 +31,13 @@ APlataformasSpawnGameMode::APlataformasSpawnGameMode()
     band = 0;
     cont = 0;
 
-    MaxEnemigos = 3;
+    MaxEnemigos = 4;
     EnemigosGenerados = 0;
     static ConstructorHelpers::FClassFinder<AEnemigoDisparo> ProyectilClassFinder(TEXT("Class'/Script/PlataformasSpawn.EnemigoDisparo'"));
     if (ProyectilClassFinder.Succeeded())
     {
         EnemigoClase = ProyectilClassFinder.Class;
     }
-
 }
 
 void APlataformasSpawnGameMode::BeginPlay()
@@ -132,8 +136,17 @@ void APlataformasSpawnGameMode::GenerarEnemigos()
             APlataformas* Plataforma = Cast<APlataformas>(MapPlat[Key]);
             if (Plataforma)
             {
+                FVector MuroPosicion = Plataforma->GetActorLocation() + FVector(0, 200, 250);
+                if(EnemigosGenerados==0)
+                    AMuro* Muro = GetWorld()->SpawnActor<AMuro>(AMuroElectrico::StaticClass(), MuroPosicion, FRotator::ZeroRotator);
+               if (EnemigosGenerados == 1)
+                    AMuro* Muro = GetWorld()->SpawnActor<AMuro>(AMuroLadrillo::StaticClass(), MuroPosicion, FRotator::ZeroRotator);
+               if (EnemigosGenerados == 2)
+                    AMuro* Muro = GetWorld()->SpawnActor<AMuro>(AMuroPegajoso::StaticClass(), MuroPosicion, FRotator::ZeroRotator);
+               if (EnemigosGenerados == 3)
+                    AMuro* Muro = GetWorld()->SpawnActor<AMuro>(AMuroCongelado::StaticClass(), MuroPosicion, FRotator::ZeroRotator);
                 FVector EnemigoPosicion = Plataforma->GetActorLocation() + FVector(0, 0, 200);
-                AEnemigoDisparo* Enemigo = GetWorld()->SpawnActor<AEnemigoDisparo>(EnemigoClase, EnemigoPosicion, FRotator::ZeroRotator);
+                AEnemigoDisparo* Enemigo = GetWorld()->SpawnActor<AEnemigoDisparo>(EnemigoClase, EnemigoPosicion, FRotator::ZeroRotator); 
                  Enemigos.Add(Enemigo);
                     EnemigosGenerados++;
             }
