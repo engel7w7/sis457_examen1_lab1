@@ -1,1 +1,2 @@
 # PlataformasAuxiliatura
+//primer parcial 
