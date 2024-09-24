@@ -25,14 +25,20 @@ public:
 
 private:
 	bool mover;
+	int direccion;
 	FVector LimiteSuperior;
 	FVector LimiteInferior;
+	FVector LimiteSuperiorAux;
+	FVector LimiteInferiorAux;
 	FVector DireccionMovimiento;
+	FVector DireccionMovimientoAux;
 	float velocidad;
 
 public:
 	void setmover(bool _mover) { mover = _mover; }
 	bool getmover() { return mover; }
+	void setdireccion(int _direccion) { direccion = _direccion; }
+	int getdireccion() { return direccion; }
 
 protected:
 	// Malla de la plataforma

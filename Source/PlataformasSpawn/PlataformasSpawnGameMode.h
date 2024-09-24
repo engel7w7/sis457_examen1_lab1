@@ -30,7 +30,8 @@ private:
 	int MaxEnemigos, EnemigosGenerados;
 	TArray<AEnemigoDisparo*> Enemigos;
 	//TArray<AMuro*> Muros;
-	TMap<FString, AActor*> MapPlat;
+	TArray<AActor* > MapPlat;
+	//TMap<FString, AActor*> MapPlat;
 	FVector Posicion;
 	float PosicionAuxiliar;
 	FRotator Rotacion;

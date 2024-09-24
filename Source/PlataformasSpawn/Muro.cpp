@@ -26,7 +26,7 @@ AMuro::AMuro()
 
 	MuroCollision->OnComponentBeginOverlap.AddDynamic(this, &AMuro::OnOverlapBegin);
 	
-	InitialLifeSpan = 40.f;
+	InitialLifeSpan = 200.f;
 }
 
 // Called when the game starts or when spawned

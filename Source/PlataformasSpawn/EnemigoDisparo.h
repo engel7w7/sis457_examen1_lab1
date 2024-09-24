@@ -33,4 +33,5 @@ protected:
 	FTimerHandle TimerHandle_ShotTimerExpired;
 	void ShotTimer();
 	bool bDisIz;
+	int FireDirectionIndex;
 };

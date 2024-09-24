@@ -29,7 +29,7 @@ Aproyectil::Aproyectil()
     MovimientoProyectil->InitialSpeed = 1500.0f;
     MovimientoProyectil->MaxSpeed = 2500.0f;
     ColisionEsfera->OnComponentHit.AddDynamic(this, &Aproyectil::OnHit);
-    InitialLifeSpan = 0.5f;
+    InitialLifeSpan = 0.7f;
 }
 
 // Called when the game starts or when spawned

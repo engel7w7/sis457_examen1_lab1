@@ -21,6 +21,7 @@ APlataformasSpawnCharacter::APlataformasSpawnCharacter()
     bUseControllerRotationYaw = false;
     bUseControllerRotationRoll = false;
 
+
     // Create a camera boom attached to the root (capsule)
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
     CameraBoom->SetupAttachment(RootComponent);
@@ -44,6 +45,7 @@ APlataformasSpawnCharacter::APlataformasSpawnCharacter()
     GetCharacterMovement()->GroundFriction = 3.f;
     GetCharacterMovement()->MaxWalkSpeed = 600.f;
     GetCharacterMovement()->MaxFlySpeed = 600.f;
+
 
     // Find and set the projectile class
     static ConstructorHelpers::FClassFinder<Aproyectil> ProyectilClassFinder(TEXT("Class'/Script/PlataformasSpawn.proyectil'"));
@@ -82,6 +84,11 @@ void APlataformasSpawnCharacter::TouchStarted(const ETouchIndex::Type FingerInde
 void APlataformasSpawnCharacter::TouchStopped(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
     StopJumping();
+}
+void APlataformasSpawnCharacter::PostInitializeComponents()
+{
+    Super::PostInitializeComponents();
+    SetActorLocation(FVector(1180.f, -1700.f, 3600.f));
 }
 
 void APlataformasSpawnCharacter::DispararProyectil()

@@ -33,6 +33,8 @@ protected:
 	/** Handle touch stop event. */
 	void TouchStopped(const ETouchIndex::Type FingerIndex, const FVector Location);
 
+	void PostInitializeComponents();
+
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 public:
@@ -43,6 +45,7 @@ private:
 	// Clase del proyectil a disparar
 	UPROPERTY(EditDefaultsOnly, Category = "Proyectil")
 	TSubclassOf<Aproyectil> ClaseProyectil;
+	
 
 	// End of APawn interface
 
