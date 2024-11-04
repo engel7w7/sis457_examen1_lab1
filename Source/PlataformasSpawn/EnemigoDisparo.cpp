@@ -10,7 +10,7 @@ AEnemigoDisparo::AEnemigoDisparo()
     // Encontrar la malla del enemigo
     static ConstructorHelpers::FObjectFinder<UStaticMesh>
         EnemigoDisparo(TEXT("StaticMesh'/Game/Geometry/CuboMesh/ConoStaticMesh.ConoStaticMesh'"));
-
+ 
     CuboMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CuboMesh"));
     CuboMesh->SetRelativeScale3D(FVector(1, 1, 1));
     CuboMesh->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));

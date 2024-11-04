@@ -8,7 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "proyectil.h"
 #include "Engine/World.h"
-#include "Engine/Engine.h" // Para GEngine
+#include "Engine/Engine.h"
 #include "UObject/ConstructorHelpers.h"
 
 APlataformasSpawnCharacter::APlataformasSpawnCharacter()
@@ -41,7 +41,7 @@ APlataformasSpawnCharacter::APlataformasSpawnCharacter()
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f); // Rotation rate
     GetCharacterMovement()->GravityScale = 2.f;
     GetCharacterMovement()->AirControl = 0.80f;
-    GetCharacterMovement()->JumpZVelocity = 1500.f;
+    GetCharacterMovement()->JumpZVelocity = 2000.f;
     GetCharacterMovement()->GroundFriction = 3.f;
     GetCharacterMovement()->MaxWalkSpeed = 600.f;
     GetCharacterMovement()->MaxFlySpeed = 600.f;
@@ -85,12 +85,13 @@ void APlataformasSpawnCharacter::TouchStopped(const ETouchIndex::Type FingerInde
 {
     StopJumping();
 }
+/*
 void APlataformasSpawnCharacter::PostInitializeComponents()
 {
-    Super::PostInitializeComponents();
-    SetActorLocation(FVector(1180.f, -1700.f, 3600.f));
+   Super::PostInitializeComponents();
+   SetActorLocation(FVector(1180.f, -1700.f, 3600.f));
 }
-
+*/
 void APlataformasSpawnCharacter::DispararProyectil()
 {
     if (ClaseProyectil)

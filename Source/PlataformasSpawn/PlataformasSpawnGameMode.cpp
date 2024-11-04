@@ -1,6 +1,7 @@
 #include "PlataformasSpawnGameMode.h"
 #include "PlataformasSpawnCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Kismet/GameplayStatics.h"
 #include "Plataformas.h"
 #include "Barril.h"
 #include "EnemigoDisparo.h"
@@ -12,6 +13,7 @@
 #include "MuroEspejo.h" 
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "FacadeTropa.h"
 
 APlataformasSpawnGameMode::APlataformasSpawnGameMode()
 {
@@ -39,6 +41,7 @@ APlataformasSpawnGameMode::APlataformasSpawnGameMode()
     {
         EnemigoClase = ProyectilClassFinder.Class;
     }
+    aux= 0;
 }
 
 void APlataformasSpawnGameMode::BeginPlay()
@@ -93,7 +96,7 @@ void APlataformasSpawnGameMode::BeginPlay()
     FString Key2 = FString::Printf(TEXT("Plataforma%d"), aux2);
     FString Key3 = FString::Printf(TEXT("Plataforma%d"), aux3);
     */
-    
+
     /*
     if (MapPlat.Contains(Key1)) {
         APlataformas* Plataforma1 = Cast<APlataformas>(MapPlat[Key1]);
@@ -181,11 +184,49 @@ void APlataformasSpawnGameMode::BeginPlay()
         }
     }
     GenerarEnemigos();
+    AFacadeTropa* Tropa = GetWorld()->SpawnActor<AFacadeTropa>(AFacadeTropa::StaticClass());
+    Tropa->SpawnTropa(GetWorld(), AEnemigo_Cuervo::StaticClass(), FVector(1210.0f, 406.0f, 555.0f), 5);
+    Tropa->CommandTropa("");
 }
 
 void APlataformasSpawnGameMode::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+    Time += DeltaTime;
+
+    APlataformasSpawnCharacter* PlayerCharacter = Cast<APlataformasSpawnCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+    APlataformas* Plataforma49 = Cast<APlataformas>(MapPlat[49]);
+    if (PlayerCharacter)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, FString::Printf(TEXT("Player Location: %s"), *PlayerCharacter->GetActorLocation().ToString()));
+        FVector CharacterLocation = PlayerCharacter->GetActorLocation();
+        FVector Plataforma49Location = Plataforma49->GetActorLocation();
+        GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Red, FString::Printf(TEXT("Plataforma49Location: %s"), *Plataforma49Location.ToString()));
+        float DistanciaUmbral = 250.0f;
+        if (FVector::Dist(CharacterLocation, Plataforma49Location) <= DistanciaUmbral)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, TEXT("El jugador está en la plataforma 49"));
+            return;
+        }
+    }
+    if (Time >= 5)
+    {
+        if (aux < MapPlat.Num() - 1)
+        {
+            APlataformas* PlataformaDestruir = Cast<APlataformas>(MapPlat[aux]);
+            if (PlataformaDestruir)
+            {
+                PlataformaDestruir->Destroy();
+            }
+
+            aux++;
+            Time = 0;
+        }
+        else
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, TEXT("Se destruyeron todas las plataformas"));
+        }
+    }
 }
 
 void APlataformasSpawnGameMode::GenerarEnemigos()

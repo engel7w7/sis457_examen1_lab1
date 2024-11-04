@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #pragma once
-
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "PlataformasSpawnGameMode.generated.h"
@@ -36,7 +35,7 @@ private:
 	float PosicionAuxiliar;
 	FRotator Rotacion;
 	int spawnsPlataformas;
-	float Time;
+	float Time,aux;
 	int band;
 	class ABarril* Ba;
 	int cont;

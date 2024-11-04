@@ -4,6 +4,7 @@
 #include "Muro.h"
 #include "Components/BoxComponent.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Kismet/GameplayStatics.h"
 // Sets default values
 AMuro::AMuro()
 {
@@ -11,6 +12,9 @@ AMuro::AMuro()
 	PrimaryActorTick.bCanEverTick = true;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>
 		Muro(TEXT("StaticMesh'/Game/Geometry/MuroMesh/MuroStaticMesh.MuroStaticMesh'"));
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> FireParticle(TEXT("ParticleSystem'/Game/StarterContent/Particles/P_Fire.P_Fire'"));
+	static ConstructorHelpers::FObjectFinder<USoundBase> ExplosionSoundObject(TEXT("SoundWave'/Game/StarterContent/Audio/Light02.Light02'"));
+
 
 	MuroMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Muro_Mesh"));
 	MuroMesh->SetRelativeScale3D(FVector(1.5, 0.2, 1.7));
@@ -25,6 +29,8 @@ AMuro::AMuro()
 	MuroCollision->SetupAttachment(GetRootComponent());
 
 	MuroCollision->OnComponentBeginOverlap.AddDynamic(this, &AMuro::OnOverlapBegin);
+	ParticleSystem = FireParticle.Object;
+	ImpactSound = ExplosionSoundObject.Object;
 	
 	InitialLifeSpan = 200.f;
 }
@@ -45,5 +51,22 @@ void AMuro::Tick(float DeltaTime)
 
 void AMuro::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	// Comportamiento por defecto
+	SpawnParticles();
+	PlayImpactSound();
+}
+
+void AMuro::SpawnParticles()
+{
+	if (ParticleSystem)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleSystem, GetActorLocation());
+	}
+}
+
+void AMuro::PlayImpactSound()
+{
+	if (ImpactSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
+	}
 }
