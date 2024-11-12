@@ -24,7 +24,7 @@ void AFacadeTropa::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 
     Timer += DeltaTime;
-    GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Red, FString::Printf(TEXT("Timer: %f"), Timer));
+    GEngine->AddOnScreenDebugMessage(-1, 0.008f, FColor::Red, FString::Printf(TEXT("Timer: %f"), Timer));
 
     if (Timer >= 15.0f && Timer < 25.0f)
     {

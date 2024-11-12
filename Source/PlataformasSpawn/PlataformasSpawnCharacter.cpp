@@ -6,10 +6,11 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "proyectil.h"
+#include "ProyectilADaptado.h"
 #include "Engine/World.h"
 #include "Engine/Engine.h"
 #include "UObject/ConstructorHelpers.h"
+#include "TimerManager.h"
 
 APlataformasSpawnCharacter::APlataformasSpawnCharacter()
 {
@@ -47,14 +48,45 @@ APlataformasSpawnCharacter::APlataformasSpawnCharacter()
     GetCharacterMovement()->MaxFlySpeed = 600.f;
 
 
-    // Find and set the projectile class
-    static ConstructorHelpers::FClassFinder<Aproyectil> ProyectilClassFinder(TEXT("Class'/Script/PlataformasSpawn.proyectil'"));
-    if (ProyectilClassFinder.Succeeded())
-    {
-        ClaseProyectil = ProyectilClassFinder.Class;
-    }
+    ClaseProyectil = AProyectilAdaptado::StaticClass();
+    publicador = nullptr;
+    VelocidadBase = 600.0f;
+    //SaltoBase = 600.0f;
+
+    MultiplicadorVelocidad = 1.5f;
+    //MultiplicadorSalto = 1.3f;
+
+    DuracionPowerUp = 10.0f;
 }
 
+void APlataformasSpawnCharacter::IncrementarVelocidad()
+{
+    GetCharacterMovement()->MaxWalkSpeed = VelocidadBase * MultiplicadorVelocidad;
+
+    FTimerHandle TimerHandle;
+    GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlataformasSpawnCharacter::RevertirVelocidad, DuracionPowerUp, false);
+
+}
+/*
+void APlataformasSpawnCharacter::IncrementarSalto()
+{
+    GetCharacterMovement()->JumpZVelocity = SaltoBase * MultiplicadorSalto;
+
+    FTimerHandle TimerHandle;
+    GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlataformasSpawnCharacter::RevertirSalto, DuracionPowerUp, false);
+
+}
+*/
+void APlataformasSpawnCharacter::RevertirVelocidad()
+{
+    GetCharacterMovement()->MaxWalkSpeed = VelocidadBase;
+}
+/*
+void APlataformasSpawnCharacter::RevertirSalto()
+{
+    GetCharacterMovement()->JumpZVelocity = SaltoBase;
+}
+*/
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -94,6 +126,7 @@ void APlataformasSpawnCharacter::PostInitializeComponents()
 */
 void APlataformasSpawnCharacter::DispararProyectil()
 {
+    //publicador->notificarObservadores();
     if (ClaseProyectil)
     {
         FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 250.f;
@@ -102,15 +135,12 @@ void APlataformasSpawnCharacter::DispararProyectil()
         UWorld* World = GetWorld();
         if (World)
         {
-            Aproyectil* Projectile = World->SpawnActor<Aproyectil>(ClaseProyectil, SpawnLocation, SpawnRotation);
-        }
-        else
-        {
-            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("World is not available!"));
-        }
-    }
-    else
-    {
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Projectile class is not assigned!"));
+            AProyectilAdaptado* ProjectilAdaptado = World->SpawnActor<AProyectilAdaptado>(ClaseProyectil, SpawnLocation, SpawnRotation);
+        	if (ProjectilAdaptado)
+			{
+				ProjectilAdaptado->cargar();
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Disparo"));
+			}
+        }    
     }
 }

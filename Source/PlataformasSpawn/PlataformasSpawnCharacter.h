@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "publicador.h"
+#include "PowerUpBase.h"
 #include "PlataformasSpawnCharacter.generated.h"
 
 // Forward declaration de AProyectil
@@ -44,11 +46,7 @@ public:
 private:
 	// Clase del proyectil a disparar
 	UPROPERTY(EditDefaultsOnly, Category = "Proyectil")
-	TSubclassOf<Aproyectil> ClaseProyectil;
-	
-
-	// End of APawn interface
-
+	UClass* ClaseProyectil;
 public:
 	APlataformasSpawnCharacter();
 
@@ -56,4 +54,19 @@ public:
 	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	//publicador para notificar a los observadores de la posicion del personaje
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Eventos")
+	Apublicador* publicador;
+public:
+	void IncrementarVelocidad();
+	//void IncrementarSalto();
+protected:
+	void RevertirVelocidad();
+	//void RevertirSalto();
+
+	float VelocidadBase;
+	//float SaltoBase;
+	float MultiplicadorVelocidad;
+	//float MultiplicadorSalto;
+	float DuracionPowerUp;
 };

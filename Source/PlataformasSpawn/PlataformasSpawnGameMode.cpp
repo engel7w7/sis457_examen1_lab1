@@ -201,11 +201,11 @@ void APlataformasSpawnGameMode::Tick(float DeltaTime)
         GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, FString::Printf(TEXT("Player Location: %s"), *PlayerCharacter->GetActorLocation().ToString()));
         FVector CharacterLocation = PlayerCharacter->GetActorLocation();
         FVector Plataforma49Location = Plataforma49->GetActorLocation();
-        GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Red, FString::Printf(TEXT("Plataforma49Location: %s"), *Plataforma49Location.ToString()));
+        GEngine->AddOnScreenDebugMessage(-1, 0.009f, FColor::Red, FString::Printf(TEXT("Plataforma49Location: %s"), *Plataforma49Location.ToString()));
         float DistanciaUmbral = 250.0f;
         if (FVector::Dist(CharacterLocation, Plataforma49Location) <= DistanciaUmbral)
         {
-            GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, TEXT("El jugador está en la plataforma 49"));
+            GEngine->AddOnScreenDebugMessage(-1, 0.009f, FColor::Green, TEXT("El jugador está en la plataforma 49"));
             return;
         }
     }

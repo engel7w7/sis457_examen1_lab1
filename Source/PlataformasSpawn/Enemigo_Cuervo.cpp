@@ -59,7 +59,7 @@ void AEnemigo_Cuervo::mover()
 	{
 		AddMovementInput(DireccionDerecha, Velocidad);
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::White, TEXT("Enemigo_Cuervo se mueve de izquierda a derecha"));
+	GEngine->AddOnScreenDebugMessage(-1, 0.009f, FColor::White, TEXT("Enemigo_Cuervo se mueve de izquierda a derecha"));
 }
 
 void AEnemigo_Cuervo::aparecer(FVector Location)
@@ -72,7 +72,7 @@ void AEnemigo_Cuervo::aparecer(FVector Location)
 void AEnemigo_Cuervo::desaparecer()
 {
 	Destroy();
-	GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Yellow, TEXT("Enemigo_Cuervo desaparece"));
+	GEngine->AddOnScreenDebugMessage(-1, 0.009f, FColor::Yellow, TEXT("Enemigo_Cuervo desaparece"));
 }
 
 void AEnemigo_Cuervo::RegresarAPosicionInicial()
