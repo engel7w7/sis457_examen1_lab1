@@ -29,4 +29,13 @@ public:
 	virtual void mover() override;
 	virtual void aparecer(FVector Location) override;
 	virtual void desaparecer() override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Strategy")
+	AActor* CurrentActionStrategy;
+	void PerformAction();
+	void SetActionStrategy(TSubclassOf<AActor> StrategyClass);
+private:
+	FTimerHandle StrategyTimerHandle;
+	void StartStrategyTimer();
+	void ExecuteStrategyPeriodically();
+
 };

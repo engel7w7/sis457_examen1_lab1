@@ -14,6 +14,7 @@
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "FacadeTropa.h"
+#include "Enemigo_Lobo.h"
 
 APlataformasSpawnGameMode::APlataformasSpawnGameMode()
 {
@@ -187,6 +188,10 @@ void APlataformasSpawnGameMode::BeginPlay()
     AFacadeTropa* Tropa = GetWorld()->SpawnActor<AFacadeTropa>(AFacadeTropa::StaticClass());
     Tropa->SpawnTropa(GetWorld(), AEnemigo_Cuervo::StaticClass(), FVector(1210.0f, 406.0f, 555.0f), 5);
     Tropa->CommandTropa("");
+    FVector SpawnLocation = FVector(0.0f, 0.0f, 300.0f);
+    FRotator SpawnRotation = FRotator::ZeroRotator;
+    AEnemigo_Lobo* SpawnedLobo = GetWorld()->SpawnActor<AEnemigo_Lobo>(SpawnLocation, SpawnRotation);
+
 }
 
 void APlataformasSpawnGameMode::Tick(float DeltaTime)

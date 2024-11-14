@@ -2,6 +2,10 @@
 
 
 #include "Enemigo_Lobo.h"
+#include "EnemyActionStrategy.h"
+#include "JumpStrategy.h"
+#include "Engine/World.h"
+#include "TimerManager.h"
 
 // Sets default values
 AEnemigo_Lobo::AEnemigo_Lobo()
@@ -20,7 +24,9 @@ AEnemigo_Lobo::AEnemigo_Lobo()
 void AEnemigo_Lobo::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	SetActionStrategy(AJumpStrategy::StaticClass());
+	StartStrategyTimer();
 }
 
 // Called every frame
@@ -51,4 +57,68 @@ void AEnemigo_Lobo::aparecer(FVector Location)
 void AEnemigo_Lobo::desaparecer()
 {
 }
+void AEnemigo_Lobo::StartStrategyTimer()
+{
+	GetWorld()->GetTimerManager().SetTimer(StrategyTimerHandle,this,&AEnemigo_Lobo::ExecuteStrategyPeriodically,20.0f,true);
+}
+void AEnemigo_Lobo::PerformAction()
+{
+    if (CurrentActionStrategy && CurrentActionStrategy->GetClass()->ImplementsInterface(UEnemyActionStrategy::StaticClass()))
+    {
+        IEnemyActionStrategy* Action = Cast<IEnemyActionStrategy>(CurrentActionStrategy);
+        if (Action)
+        {
+            if (GEngine)
+            {
+                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Executing strategy action on the enemy."));
+            }
+            Action->ExecuteAction(this);
+        }
+        else
+        {
+            if (GEngine)
+            {
+                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Failed to cast to IEnemyActionInterface!"));
+            }
+        }
+    }
+    else
+    {
+        if (GEngine)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("CurrentActionStrategy is null or does not implement the interface!"));
+        }
+    }
+}
+
+void AEnemigo_Lobo::ExecuteStrategyPeriodically()
+{
+	PerformAction();
+}
+
+void AEnemigo_Lobo::SetActionStrategy(TSubclassOf<AActor> StrategyClass)
+{
+    if (CurrentActionStrategy)
+    {
+        CurrentActionStrategy->Destroy();
+    }
+    CurrentActionStrategy = GetWorld()->SpawnActor<AActor>(StrategyClass, FVector::ZeroVector, FRotator::ZeroRotator);
+
+    if (CurrentActionStrategy)
+    {
+        if (GEngine)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,
+                FString::Printf(TEXT("Strategy created successfully: %s"), *CurrentActionStrategy->GetName()));
+        }
+    }
+    else
+    {
+        if (GEngine)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Failed to create strategy!"));
+        }
+    }
+}
+
 
