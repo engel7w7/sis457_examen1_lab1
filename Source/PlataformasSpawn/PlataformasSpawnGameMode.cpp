@@ -188,7 +188,7 @@ void APlataformasSpawnGameMode::BeginPlay()
     AFacadeTropa* Tropa = GetWorld()->SpawnActor<AFacadeTropa>(AFacadeTropa::StaticClass());
     Tropa->SpawnTropa(GetWorld(), AEnemigo_Cuervo::StaticClass(), FVector(1210.0f, 406.0f, 555.0f), 5);
     Tropa->CommandTropa("");
-    FVector SpawnLocation = FVector(0.0f, 0.0f, 300.0f);
+    FVector SpawnLocation = FVector(1200.0f, 300.0f, 300.0f);
     FRotator SpawnRotation = FRotator::ZeroRotator;
     AEnemigo_Lobo* SpawnedLobo = GetWorld()->SpawnActor<AEnemigo_Lobo>(AEnemigo_Lobo::StaticClass(), SpawnLocation, SpawnRotation);
 
