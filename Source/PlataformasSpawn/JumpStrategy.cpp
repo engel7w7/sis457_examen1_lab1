@@ -39,8 +39,10 @@ void AJumpStrategy::ExecuteAction(AEnemigo_Lobo* Enemy)
         UCharacterMovementComponent* CharacterMovement = Enemy->GetCharacterMovement();
         if (CharacterMovement)
         {
-            FVector JumpImpulse = FVector(0.0f, 0.0f, 600.0f);
-            CharacterMovement->AddImpulse(JumpImpulse, true);
+            FVector aux = GetActorLocation();
+            FVector JumpImpulse = FVector(0.0f, 0.0f, 400.0f);
+            SetActorLocation(aux + JumpImpulse);
+            CharacterMovement->AddImpulse(aux, true);
         }
         else
         {

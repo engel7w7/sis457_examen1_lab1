@@ -4,6 +4,8 @@
 #include "Enemigo_Lobo.h"
 #include "EnemyActionStrategy.h"
 #include "JumpStrategy.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
 
@@ -17,23 +19,51 @@ AEnemigo_Lobo::AEnemigo_Lobo()
 	{
 		GetMesh()->SetSkeletalMesh(MeshContainer.Object);
 	}
+    Velocidad = 2.6f;
+    moverse = true;
+    GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+    PosicionI = GetActorLocation();
+    LimiteI = PosicionI + FVector(0, 600, 0);
+    LimiteF = PosicionI + FVector(0, -600, 0);
+    LimiteS = PosicionI + FVector(0, 0, -300);
+    LimiteSS = PosicionI + FVector(0, 0, 300);
 
 }
 
 // Called when the game starts or when spawned
 void AEnemigo_Lobo::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
 
-	SetActionStrategy(AJumpStrategy::StaticClass());
-	StartStrategyTimer();
+    SetActionStrategy(AJumpStrategy::StaticClass());
+    StartStrategyTimer();
+    mover();
 }
 
 // Called every frame
 void AEnemigo_Lobo::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+    time += DeltaTime;
+    if (time >= 15.0f) {
+        if (moverse)
+        {
+            if (posicionAc.Z <= LimiteSS.Z) {
+                posicionAc.Z -= Velocidad*FMath::RandRange(0.8f, 1.2f);;
+            }
+            else moverse = false;
+        }
+        else
+        {
+            if (posicionAc.Z >= LimiteS.Z) {
+                posicionAc.Z += Velocidad* FMath::RandRange(0.8f, 1.2f);
+            }
+            else moverse = true;
+        }
+        SetActorLocation(posicionAc);
+        float TimerInterval = FMath::RandRange(0.001f, 0.003f);
+        GetWorld()->GetTimerManager().SetTimer(Timer, this, &AEnemigo_Lobo::mover, TimerInterval, true);
+    }
 }
 
 // Called to bind functionality to input
@@ -48,6 +78,24 @@ void AEnemigo_Lobo::atacar()
 
 void AEnemigo_Lobo::mover()
 {
+    posicionAc = GetActorLocation();
+    if (moverse)
+    {
+        if (posicionAc.Y <= LimiteI.Y) {
+            posicionAc.Y += Velocidad * FMath::RandRange(0.8f, 1.2f);
+        }
+        else moverse = false;
+    }
+    else
+    {
+        if (posicionAc.Y >= LimiteF.Y) {
+            posicionAc.Y -= Velocidad * FMath::RandRange(0.8f, 1.2f);
+        }
+        else moverse = true;
+    }
+    SetActorLocation(posicionAc);
+    float TimerInterval = FMath::RandRange(0.001f, 0.003f);
+    GetWorld()->GetTimerManager().SetTimer(Timer, this, &AEnemigo_Lobo::mover, TimerInterval, true);
 }
 
 void AEnemigo_Lobo::aparecer(FVector Location)
@@ -59,7 +107,7 @@ void AEnemigo_Lobo::desaparecer()
 }
 void AEnemigo_Lobo::StartStrategyTimer()
 {
-	GetWorld()->GetTimerManager().SetTimer(StrategyTimerHandle,this,&AEnemigo_Lobo::ExecuteStrategyPeriodically,20.0f,true);
+	GetWorld()->GetTimerManager().SetTimer(StrategyTimerHandle,this,&AEnemigo_Lobo::ExecuteStrategyPeriodically,15.0f,true);
 }
 void AEnemigo_Lobo::PerformAction()
 {

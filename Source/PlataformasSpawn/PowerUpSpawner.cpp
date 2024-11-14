@@ -12,8 +12,8 @@ APowerUpSpawner::APowerUpSpawner()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
     SpawnInterval = 5.0f;
-	SpawnAreaMin = FVector(-100.0f, -100.0f, 0.0f);
-	SpawnAreaMax = FVector(100.0f, 100.0f, 0.0f);
+	SpawnAreaMin = FVector(-400.0f, -400.0f, 400.0f);
+	SpawnAreaMax = FVector(400.0f, 400.0f, 400.0f);
 
 }
 

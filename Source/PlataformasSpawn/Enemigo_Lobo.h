@@ -34,8 +34,18 @@ public:
 	void PerformAction();
 	void SetActionStrategy(TSubclassOf<AActor> StrategyClass);
 private:
+	float time;
 	FTimerHandle StrategyTimerHandle;
 	void StartStrategyTimer();
 	void ExecuteStrategyPeriodically();
+	FVector PosicionI;
+	FVector LimiteI;
+	FVector LimiteF;
+	FVector LimiteS;
+	FVector LimiteSS;
+	FVector posicionAc;
+	FVector ObjetivoAc;
+	float Velocidad;
+	bool moverse;
 
 };
