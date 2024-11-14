@@ -30,6 +30,6 @@ public:
 	virtual void mover() PURE_VIRTUAL(AEnemigo::mover();)
 	virtual void aparecer(FVector location) PURE_VIRTUAL(AEnemigo::aparecer(FVector location);)
 	virtual void desaparecer() PURE_VIRTUAL(AEnemigo::desaparecer();)
-	
+	FTimerHandle Timer;
 
 };

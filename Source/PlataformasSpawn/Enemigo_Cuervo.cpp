@@ -1,5 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "Enemigo_Cuervo.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 AEnemigo_Cuervo::AEnemigo_Cuervo()
 {
@@ -9,27 +11,22 @@ AEnemigo_Cuervo::AEnemigo_Cuervo()
 	{
 		GetMesh()->SetSkeletalMesh(MeshContainer.Object);
 	}
-	bAtacando = false;
-	TiempoPermanencia = 5.0f;
-	DireccionDerecha = FVector(1.0f, 0.0f, 0.0f);
-	DireccionIzquierda = FVector(-1.0f, 0.0f, 0.0f);
-	Velocidad = 300.0f;
+	Velocidad = 2.5f;
+	moverse = true;
+	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	PosicionI = GetActorLocation();
+	LimiteI = PosicionI + FVector(0, 600, 0);
+	LimiteF = PosicionI + FVector(0, -600, 0);
 }
 void AEnemigo_Cuervo::BeginPlay()
 {
 	Super::BeginPlay();
-	PosicionInicial = GetActorLocation();
+	PosicionI = GetActorLocation();
 }
 
 void AEnemigo_Cuervo::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (bAtacando)
-	{
-		FVector Direccion = (ObjetivoActual - GetActorLocation()).GetSafeNormal();
-		AddMovementInput(Direccion, Velocidad);
-	}
 }
 
 void AEnemigo_Cuervo::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -38,33 +35,51 @@ void AEnemigo_Cuervo::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void AEnemigo_Cuervo::atacar()
 {
-	AActor* Player = GetWorld()->GetFirstPlayerController()->GetPawn();
+	APawn* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 	if (Player)
 	{
-		ObjetivoActual = Player->GetActorLocation();
-		bAtacando = true;
+		FVector Direction = (Player->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+		FVector NewLocation = GetActorLocation() + (Direction * 7.5f);
+		SetActorLocation(NewLocation);
 
-		GetWorldTimerManager().SetTimer(TimerHandle_Regreso, this, &AEnemigo_Cuervo::RegresarAPosicionInicial, TiempoPermanencia, false);
-		GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Red, TEXT("Enemigo_Cuervo ataca"));
+		FRotator NewRotation = Direction.Rotation();
+		NewRotation.Pitch = FMath::RandRange(-10.0f, 10.0f);
+		NewRotation.Roll = FMath::RandRange(-10.0f, 10.0f); 
+		NewRotation.Yaw > 0 ? NewRotation.Yaw = 0 : NewRotation.Yaw = 180;
+		SetActorRotation(NewRotation);
+
+		GetWorld()->GetTimerManager().SetTimer(Timer, this, &AEnemigo_Cuervo::atacar, FMath::RandRange(0.007f, 0.012f), true); 
+		GEngine->AddOnScreenDebugMessage(-1, 0.009f, FColor::Yellow, TEXT("Enemigo Cuervo ataca"));
 	}
+
 }
 
 void AEnemigo_Cuervo::mover()
 {
-	if (GetActorLocation().Equals(PosicionInicial + DireccionDerecha * 100.0f, 1.0f))
+	posicionAc = GetActorLocation();
+	if (moverse)
 	{
-		AddMovementInput(DireccionIzquierda, Velocidad);
+		if (posicionAc.Y <= LimiteI.Y) {
+			posicionAc.Y += Velocidad * FMath::RandRange(0.8f, 1.2f);
+		}
+		else moverse = false;
 	}
 	else
 	{
-		AddMovementInput(DireccionDerecha, Velocidad);
+		if (posicionAc.Y >= LimiteF.Y) {
+			posicionAc.Y -= Velocidad * FMath::RandRange(0.8f, 1.2f);
+		}
+		else moverse = true;
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 0.009f, FColor::White, TEXT("Enemigo_Cuervo se mueve de izquierda a derecha"));
+	SetActorLocation(posicionAc);
+	float TimerInterval = FMath::RandRange(0.001f, 0.003f);
+	GetWorld()->GetTimerManager().SetTimer(Timer, this, &AEnemigo_Cuervo::mover, TimerInterval, true);
+	GEngine->AddOnScreenDebugMessage(-1, 0.009f, FColor::Yellow, FString::Printf(TEXT("Enemigo Cuervo se mueve: %s"), *posicionAc.ToString()));
 }
 
 void AEnemigo_Cuervo::aparecer(FVector Location)
 {
-	PosicionInicial = Location;
+	PosicionI = Location;
 	SetActorLocation(Location);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Enemigo_Cuervo aparece"));
 }
@@ -73,11 +88,4 @@ void AEnemigo_Cuervo::desaparecer()
 {
 	Destroy();
 	GEngine->AddOnScreenDebugMessage(-1, 0.009f, FColor::Yellow, TEXT("Enemigo_Cuervo desaparece"));
-}
-
-void AEnemigo_Cuervo::RegresarAPosicionInicial()
-{
-	ObjetivoActual = PosicionInicial;
-	bAtacando = false;
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Enemigo_Cuervo regresa a su posicion inicial"));
 }

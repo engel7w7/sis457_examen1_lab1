@@ -11,6 +11,30 @@
 #include "Engine/Engine.h"
 #include "UObject/ConstructorHelpers.h"
 #include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
+
+
+void APlataformasSpawnCharacter::BeginPlay()
+{
+   /* Super::BeginPlay();
+        TArray<AActor*> FoundActors;
+        UGameplayStatics::GetAllActorsOfClass(GetWorld(), Apublicador::StaticClass(), FoundActors);
+        if (FoundActors.Num() > 0)
+        {
+            publicador = Cast<Apublicador>(FoundActors[0]);
+            if (publicador)
+            {
+                publicador->agregarObservador(this);
+            }
+            else
+            {
+                if (GEngine)
+                {
+                    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Fallo al inicializar publicador."));
+                }
+            }
+        }*/
+}
 
 APlataformasSpawnCharacter::APlataformasSpawnCharacter()
 {
@@ -49,10 +73,9 @@ APlataformasSpawnCharacter::APlataformasSpawnCharacter()
 
 
     ClaseProyectil = AProyectilAdaptado::StaticClass();
-    publicador = nullptr;
     VelocidadBase = 600.0f;
     //SaltoBase = 600.0f;
-
+    //Apublicador* publicador;
     MultiplicadorVelocidad = 1.5f;
     //MultiplicadorSalto = 1.3f;
 
@@ -126,7 +149,6 @@ void APlataformasSpawnCharacter::PostInitializeComponents()
 */
 void APlataformasSpawnCharacter::DispararProyectil()
 {
-    //publicador->notificarObservadores();
     if (ClaseProyectil)
     {
         FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 250.f;

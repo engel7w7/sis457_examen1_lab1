@@ -33,17 +33,11 @@ public:
 	virtual void aparecer(FVector Location) override;
 	virtual void desaparecer() override;
 protected:
-	FVector PosicionInicial;
-	FVector DireccionDerecha;
-	FVector DireccionIzquierda;
-
-	FTimerHandle TimerHandle_Regreso;
-	FTimerHandle TimerHandle_CambioDireccion;
-
-	void RegresarAPosicionInicial();
-
-	FVector ObjetivoActual;
-	bool bAtacando;
-	float TiempoPermanencia;
+	FVector PosicionI;
+	FVector LimiteI;
+	FVector LimiteF;
+	FVector posicionAc;
+	FVector ObjetivoAc;
 	float Velocidad;
+	bool moverse;
 };

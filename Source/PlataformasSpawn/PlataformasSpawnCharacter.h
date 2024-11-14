@@ -47,6 +47,9 @@ private:
 	// Clase del proyectil a disparar
 	UPROPERTY(EditDefaultsOnly, Category = "Proyectil")
 	UClass* ClaseProyectil;
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 public:
 	APlataformasSpawnCharacter();
 
@@ -54,10 +57,6 @@ public:
 	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	//publicador para notificar a los observadores de la posicion del personaje
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Eventos")
-	Apublicador* publicador;
-public:
 	void IncrementarVelocidad();
 	//void IncrementarSalto();
 protected:
