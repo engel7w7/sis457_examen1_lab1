@@ -190,7 +190,7 @@ void APlataformasSpawnGameMode::BeginPlay()
     Tropa->CommandTropa("");
     FVector SpawnLocation = FVector(0.0f, 0.0f, 300.0f);
     FRotator SpawnRotation = FRotator::ZeroRotator;
-    AEnemigo_Lobo* SpawnedLobo = GetWorld()->SpawnActor<AEnemigo_Lobo>(SpawnLocation, SpawnRotation);
+    AEnemigo_Lobo* SpawnedLobo = GetWorld()->SpawnActor<AEnemigo_Lobo>(AEnemigo_Lobo::StaticClass(), SpawnLocation, SpawnRotation);
 
 }
 
