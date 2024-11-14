@@ -3,6 +3,7 @@
 
 #include "JumpStrategy.h"
 #include "Enemigo_Lobo.h"
+#include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -29,23 +30,32 @@ void AJumpStrategy::Tick(float DeltaTime)
 
 void AJumpStrategy::ExecuteAction(AEnemigo_Lobo* Enemy)
 {
-    if (Enemy)
+    if (Enemy && Enemy->IsA(AEnemigo_Lobo::StaticClass()))
     {
-        FVector JumpImpulse = FVector(0.0f, 0.0f, 600.0f);
-        FVector Aux = FVector(0.f, 0.f, 200.f) + JumpImpulse;
         if (GEngine)
         {
-            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Adding jump impulse to the enemy."));
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Adding jump impulse to the lobo."));
         }
-        Enemy->GetCharacterMovement()->AddImpulse(Aux, true);
+        UCharacterMovementComponent* CharacterMovement = Enemy->GetCharacterMovement();
+        if (CharacterMovement)
+        {
+            FVector JumpImpulse = FVector(0.0f, 0.0f, 600.0f);
+            CharacterMovement->AddImpulse(JumpImpulse, true);
+        }
+        else
+        {
+            if (GEngine)
+            {
+                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("CharacterMovement component is missing!"));
+            }
+        }
     }
     else
     {
         if (GEngine)
         {
-            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Enemy reference is null in JumpStrategy!"));
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Enemy reference is null or not of type AEnemigo_Lobo!"));
         }
     }
 }
-
 

@@ -74,7 +74,7 @@ void AEnemigo_Cuervo::mover()
 	SetActorLocation(posicionAc);
 	float TimerInterval = FMath::RandRange(0.001f, 0.003f);
 	GetWorld()->GetTimerManager().SetTimer(Timer, this, &AEnemigo_Cuervo::mover, TimerInterval, true);
-	GEngine->AddOnScreenDebugMessage(-1, 0.009f, FColor::Yellow, FString::Printf(TEXT("Enemigo Cuervo se mueve: %s"), *posicionAc.ToString()));
+	GEngine->AddOnScreenDebugMessage(-1, 0.007f, FColor::Yellow, FString::Printf(TEXT("Enemigo Cuervo se mueve: %s"), *posicionAc.ToString()));
 }
 
 void AEnemigo_Cuervo::aparecer(FVector Location)
